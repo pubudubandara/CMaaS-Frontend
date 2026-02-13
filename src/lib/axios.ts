@@ -3,7 +3,7 @@ import axios from 'axios';
 // Create an instance
 const api = axios.create({
   // If you are running .NET locally, it might be http://localhost:5000/api
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api', 
+  baseURL: `${import.meta.env.VITE_BACKEND_URL}/api`, 
   headers: {
     'Content-Type': 'application/json',
   },
