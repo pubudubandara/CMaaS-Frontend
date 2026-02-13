@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   Key, Copy, Trash2, Shield, CreditCard, User, 
   Check, AlertTriangle, Plus 
