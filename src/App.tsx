@@ -3,13 +3,14 @@ import DashboardLayout from './components/layout/DashboardLayout';
 import Register from './pages/Register';
 import Login from './pages/Login'; 
 import SchemaBuilder from './pages/SchemaBuilder';
-import ContentManager from './pages/ContentManager'; 
 import ContentTypesList from './pages/ContentTypesList';
 import ContentTypeCreate from './pages/ContentTypeCreate';
 import ContentEntries from './pages/ContentEntries';
 import ContentEntryCreate from './pages/ContentEntryCreate';
 import DashboardHome from './pages/DashboardHome';   
 import Settings from './pages/Settings';
+import ContentEntryEdit from './pages/ContentEntryEdit';
+import ContentTypeEdit from './pages/ContentTypeEdit';
 
 function App() {
   return (
@@ -24,12 +25,15 @@ function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardHome />} />
           <Route path="schema-builder" element={<SchemaBuilder />} />
-          <Route path="content-manager" element={<ContentManager />} />
+
           <Route path="content-types" element={<ContentTypesList />} />
           <Route path="content-types/create" element={<ContentTypeCreate />} />
+          <Route path="content-types/edit/:id" element={<ContentTypeEdit />} />
+
           <Route path="content-manager/:contentTypeId" element={<ContentEntries />} />
           <Route path="content-manager/:contentTypeId/create" element={<ContentEntryCreate />} />
-          <Route path="content-manager/:contentTypeId/edit/:entryId" element={<ContentEntryCreate />} />
+          <Route path="content-manager/:contentTypeId/edit/:entryId" element={<ContentEntryEdit/>} />
+          
           <Route path="settings" element={<Settings/>}/>
         </Route>
       </Routes>
