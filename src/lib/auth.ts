@@ -67,7 +67,6 @@ export const login = async (data: LoginData): Promise<AuthResponse> => {
 
 export const logout = () => {
   localStorage.removeItem('token');
-  window.location.href = '/login'; // Optional: Redirect to login
 };
 
 // --- 4. Token Decoding Function (The Magic Part) ✨ ---
@@ -81,7 +80,7 @@ export const getUser = (): User | null => {
     // Check if token is expired
     const currentTime = Date.now() / 1000;
     if (decoded.exp < currentTime) {
-      logout();
+      localStorage.removeItem('token'); // Just remove expired token
       return null;
     }
 
