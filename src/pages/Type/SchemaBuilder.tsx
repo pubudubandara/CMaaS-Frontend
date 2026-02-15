@@ -67,7 +67,7 @@ export default function SchemaBuilder() {
       await api.post('/ContentTypes', schemaPayload);
       
       // Success - Redirect
-      navigate('/content-types'); 
+      navigate('/app/content-types'); 
     } catch (error) {
       console.error("Failed to save:", error);
       alert("Failed to save schema. Check backend console.");

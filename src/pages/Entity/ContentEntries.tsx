@@ -192,7 +192,7 @@ export default function ContentEntries() {
   };
 
   const handleEdit = (entryId: number) => {
-    navigate(`/content-manager/${contentTypeId}/edit/${entryId}`);
+    navigate(`/app/content-manager/${contentTypeId}/edit/${entryId}`);
   };
 
   const handleDelete = async (entryId: number) => {
@@ -239,7 +239,7 @@ export default function ContentEntries() {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate('/dashboard')} className="p-2 hover:bg-gray-100 rounded-lg">
+          <button onClick={() => navigate('/app/dashboard')} className="p-2 hover:bg-gray-100 rounded-lg">
             <ArrowLeft size={20} />
           </button>
           <div>
@@ -248,8 +248,8 @@ export default function ContentEntries() {
           </div>
         </div>
         <button
-          onClick={() => navigate(`/content-manager/${contentTypeId}/create`)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          onClick={() => navigate(`/app/content-manager/${contentTypeId}/create`)}
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover"
         >
           <Plus size={20} />
           Create New Entry

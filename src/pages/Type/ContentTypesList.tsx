@@ -81,7 +81,7 @@ export default function ContentTypesList() {
           <p className="text-sm text-gray-500 mt-1">Manage the structure of your content.</p>
         </div>
         <button
-          onClick={() => navigate('/schema-builder')}
+          onClick={() => navigate('/app/schema-builder')}
           className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors shadow-sm font-medium"
         >
           <Plus size={18} />
@@ -97,7 +97,7 @@ export default function ContentTypesList() {
           <h3 className="text-lg font-bold text-dark mb-1">No content types found</h3>
           <p className="text-gray-500 mb-6">Create your first schema to start adding content.</p>
           <button
-            onClick={() => navigate('/schema-builder')}
+            onClick={() => navigate('/app/schema-builder')}
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors font-medium"
           >
             <Plus size={18} />
@@ -128,14 +128,14 @@ export default function ContentTypesList() {
                   {/* Action Buttons */}
                   <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
-                      onClick={() => navigate(`/content-manager/${type.id}`)}
+                      onClick={() => navigate(`/app/content-manager/${type.id}`)}
                       className="p-1.5 text-gray-400 hover:text-primary hover:bg-primary-light rounded transition-colors"
                       title="View Entries"
                     >
                       <FileText size={16} />
                     </button>
                     <button
-                      onClick={() => navigate(`/content-types/edit/${type.id}`)} 
+                      onClick={() => navigate(`/app/content-types/edit/${type.id}`)} 
                       className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
                       title="Edit Schema"
                     >

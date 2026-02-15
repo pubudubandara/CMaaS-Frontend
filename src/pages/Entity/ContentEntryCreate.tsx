@@ -68,7 +68,7 @@ export default function ContentEntryCreate() {
       };
 
       await api.post('/ContentEntries', payload);
-      navigate(`/content-manager/${contentTypeId}`);
+      navigate(`/app/content-manager/${contentTypeId}`);
       
     } catch (error) {
       console.error('Failed to create entry:', error);

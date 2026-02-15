@@ -65,7 +65,7 @@ export default function ContentEntryEdit() {
       };
 
       await api.put(`/ContentEntries/${entryId}`, payload);
-      navigate(`/content-manager/${contentTypeId}`);
+      navigate(`/app/content-manager/${contentTypeId}`);
       
     } catch (error) {
       console.error('Failed to update entry:', error);

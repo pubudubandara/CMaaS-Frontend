@@ -84,7 +84,7 @@ export default function SchemaBuilder() {
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="flex items-center gap-4 mb-6">
-        <button onClick={() => navigate('/content-types')} className="p-2 hover:bg-gray-100 rounded-lg">
+        <button onClick={() => navigate('/app/content-types')} className="p-2 hover:bg-gray-100 rounded-lg">
           <ArrowLeft size={20} />
         </button>
         <h1 className="text-2xl font-bold text-dark">Create Content Types</h1>

@@ -92,7 +92,7 @@ export default function ContentTypeEdit() {
     try {
       console.log("Updating Schema:", schemaPayload);
       await api.put(`/ContentTypes/${id}`, schemaPayload); 
-      navigate('/content-types'); 
+      navigate('/app/content-types'); 
     } catch (error) {
       console.error("Failed to update:", error);
       alert("Failed to update schema. Check console.");

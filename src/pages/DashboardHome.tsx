@@ -74,7 +74,7 @@ export default function DashboardHome() {
           <p className="text-sm text-gray-500 mt-1">Welcome back, Pubudu. Here is what's happening today.</p>
         </div>
         <div className="flex gap-3">
-          <Link to="/schema-builder" className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded text-sm font-medium text-dark hover:bg-gray-50 transition-colors shadow-sm">
+          <Link to="/app/schema-builder" className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded text-sm font-medium text-dark hover:bg-gray-50 transition-colors shadow-sm">
             <Plus size={16} /> New Schema
           </Link>
         </div>
