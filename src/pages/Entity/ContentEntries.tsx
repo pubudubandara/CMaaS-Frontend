@@ -1,8 +1,49 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Plus, Search, Edit, Trash2, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
-import api from '../lib/axios';
+import { Plus, Search, Edit, Trash2, ArrowLeft, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import api from '../../lib/axios';
 
+// --- Image Cell Component (Skeleton Loader) ---
+const ImageCell = ({ src }: { src: string }) => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  return (
+    <div className="relative w-10 h-10 group">
+      {loading && (
+        <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-md" />
+      )}
+      <img
+        src={src}
+        alt="Thumbnail"
+        className={`w-10 h-10 object-cover rounded-md border border-gray-200 shadow-sm transition-opacity duration-300
+          ${loading ? 'opacity-0' : 'opacity-100'}
+          ${error ? 'hidden' : 'block'}
+        `}
+        onLoad={() => setLoading(false)}
+        onError={() => { setLoading(false); setError(true); }}
+      />
+      {error && (
+        <div className="w-10 h-10 bg-gray-100 rounded-md flex items-center justify-center text-gray-400">
+          <span className="text-xs">N/A</span>
+        </div>
+      )}
+      {!loading && !error && (
+        <a
+          href={src}
+          target="_blank"
+          rel="noreferrer"
+          className="absolute inset-0 bg-black/50 hidden group-hover:flex items-center justify-center rounded-md text-white cursor-pointer"
+          title="View Full Image"
+        >
+          <ExternalLink size={14} />
+        </a>
+      )}
+    </div>
+  );
+};
+
+// --- Interfaces ---
 interface ContentType {
   id: number;
   name: string;
@@ -16,9 +57,11 @@ interface ContentType {
 
 interface ContentEntry {
   id: number;
-  data: { [key: string]: any }; // The dynamic data object
+  data: { [key: string]: any };
   contentTypeId: number;
   tenantId: number;
+  isVisible: boolean; // ✅ Added isVisible
+  createdAt: string;
 }
 
 interface PaginatedResponse {
@@ -42,18 +85,16 @@ export default function ContentEntries() {
   const [pageSize] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [togglingIds, setTogglingIds] = useState<Set<number>>(new Set());
 
-  // 1. Dynamic Column Logic
   const tableColumns = entries.length > 0 
     ? Object.keys(entries[0].data) 
     : contentType?.schema?.fields.map(f => f.name) || [];
 
-  // Helper to get the field type from the schema (to preserve date/boolean formatting)
   const getFieldType = (fieldName: string) => {
     const field = contentType?.schema?.fields.find(f => f.name === fieldName);
-    return field ? field.type : 'text'; // Default to text if schema doesn't match data
+    return field ? field.type : 'text';
   };
-  // ------------------------------------------
 
   useEffect(() => {
     if (contentTypeId) {
@@ -78,7 +119,6 @@ export default function ContentEntries() {
   const fetchContentType = async () => {
     try {
       const response = await api.get(`/ContentTypes`);
-      // Find the specific content type from the list
       const foundType = response.data.find((type: any) => type.id === parseInt(contentTypeId!));
       setContentType(foundType || null);
     } catch (error) {
@@ -106,6 +146,48 @@ export default function ContentEntries() {
       setEntries([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // ✅ New Toggle Visibility Function
+  const handleToggleVisibility = async (entry: ContentEntry) => {
+    // Prevent multiple clicks on the same entry
+    if (togglingIds.has(entry.id)) return;
+
+    // Add to toggling set
+    setTogglingIds(prev => new Set(prev).add(entry.id));
+
+    // 1. Optimistic Update (UI එක ඉක්මනට වෙනස් කරන්න)
+    const originalEntries = [...entries];
+    const updatedEntries = entries.map((e) => 
+      e.id === entry.id ? { ...e, isVisible: !e.isVisible } : e
+    );
+    setEntries(updatedEntries);
+
+    try {
+      // 2. Call Backend
+      await api.patch(`/ContentEntries/${entry.id}/toggle-visibility`);
+      
+      // Wait 2 seconds before re-enabling the button
+      setTimeout(() => {
+        setTogglingIds(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(entry.id);
+          return newSet;
+        });
+      }, 2000);
+      
+    } catch (error) {
+      console.error('Failed to toggle visibility:', error);
+      // Revert if failed
+      setEntries(originalEntries);
+      // Remove from toggling set on error
+      setTogglingIds(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(entry.id);
+        return newSet;
+      });
+      alert('Failed to update visibility status');
     }
   };
 
@@ -192,12 +274,15 @@ export default function ContentEntries() {
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                {/* Dynamically Render Headers based on Data Keys */}
                 {tableColumns.map((colName) => (
                   <th key={colName} className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     {colName}
                   </th>
                 ))}
+                {/* ✅ Status Header */}
+                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
                 <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
@@ -206,37 +291,60 @@ export default function ContentEntries() {
             <tbody className="divide-y divide-gray-200">
               {loading ? (
                 <tr>
-                  <td colSpan={tableColumns.length + 1} className="px-6 py-12 text-center text-gray-500">Loading data...</td>
+                  <td colSpan={tableColumns.length + 2} className="px-6 py-12 text-center text-gray-500">Loading data...</td>
                 </tr>
               ) : entries.length === 0 ? (
                 <tr>
-                  <td colSpan={tableColumns.length + 1} className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan={tableColumns.length + 2} className="px-6 py-12 text-center text-gray-500">
                     <p>No entries found.</p>
                   </td>
                 </tr>
               ) : (
                 entries.map((entry) => (
                   <tr key={entry.id} className="hover:bg-gray-50 transition-colors">
-                    {/* Dynamically Render Cells */}
                     {tableColumns.map((colName) => (
-                      <td key={`${entry.id}-${colName}`} className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                         {/* We pass the column name to getFieldType to see if it needs special formatting */}
+                      <td 
+                        key={`${entry.id}-${colName}`} 
+                        className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 max-w-[200px]"
+                      >
                         {renderCellContent(entry.data[colName], getFieldType(colName))}
                       </td>
                     ))}
+                    
+                    {/* ✅ Status Column with Toggle Switch */}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleToggleVisibility(entry)}
+                          disabled={togglingIds.has(entry.id)}
+                          className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                            entry.isVisible ? 'bg-green-500' : 'bg-gray-300'
+                          }`}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                              entry.isVisible ? 'translate-x-5' : 'translate-x-0'
+                            }`}
+                          />
+                        </button>
+                        <span className={`text-xs font-medium w-12 text-center ${entry.isVisible ? 'text-green-700' : 'text-gray-500'}`}>
+                          {entry.isVisible ? 'Visible' : 'Hidden'}
+                        </span>
+                      </div>
+                    </td>
+
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center justify-end gap-2">
                         <button 
                           onClick={() => handleEdit(entry.id)} 
                           className="p-1 text-blue-600 hover:bg-blue-50 rounded"
-                          title="Edit entry"
                         >
                           <Edit size={16} />
                         </button>
                         <button 
                           onClick={() => handleDelete(entry.id)} 
                           className="p-1 text-red-600 hover:bg-red-50 rounded"
-                          title="Delete entry"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -259,7 +367,7 @@ export default function ContentEntries() {
             <button
               onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
-              className="w-8 h-8 flex items-center justify-center rounded text-sm hover:bg-gray-200 disabled:opacity-50 disabled:hover:bg-transparent"
+              className="w-8 h-8 flex items-center justify-center rounded text-sm hover:bg-gray-200 disabled:opacity-50"
             >
               <ChevronLeft size={16} />
             </button>
@@ -281,7 +389,7 @@ export default function ContentEntries() {
             <button
               onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
               disabled={currentPage === totalPages}
-              className="w-8 h-8 flex items-center justify-center rounded text-sm hover:bg-gray-200 disabled:opacity-50 disabled:hover:bg-transparent"
+              className="w-8 h-8 flex items-center justify-center rounded text-sm hover:bg-gray-200 disabled:opacity-50"
             >
               <ChevronRight size={16} />
             </button>
@@ -292,11 +400,18 @@ export default function ContentEntries() {
   );
 }
 
+// Helper Function for Cell Content
 function renderCellContent(value: any, type: string) {
   if (value === null || value === undefined) return '-';
+
+  if (type === 'image') {
+    return <ImageCell src={String(value)} />;
+  }
+
   if (type === 'boolean') {
     return <span className={`px-2 py-1 rounded-full text-xs font-medium ${value ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>{value ? 'Yes' : 'No'}</span>;
   }
+
   if (type === 'date') {
     try {
       return new Date(value).toLocaleDateString();
@@ -304,8 +419,19 @@ function renderCellContent(value: any, type: string) {
       return String(value);
     }
   }
+
   if (type === 'number') {
     return Number(value).toLocaleString();
   }
-  return String(value);
+
+  const stringVal = String(value);
+  if (stringVal.length > 50) {
+    return (
+      <span title={stringVal} className="cursor-help">
+        {stringVal.substring(0, 50)}...
+      </span>
+    );
+  }
+
+  return stringVal;
 }

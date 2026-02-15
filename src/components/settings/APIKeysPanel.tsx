@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Copy, Trash2, AlertTriangle, Plus, Check, Loader2, X, Key } from 'lucide-react';
+import { Copy, Trash2, AlertTriangle, Plus, Check, Loader2, Key } from 'lucide-react';
 import api from '../../lib/axios';
 
 interface ApiKey {

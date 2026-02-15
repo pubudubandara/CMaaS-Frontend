@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, ArrowLeft, Calendar, Type, Hash, ToggleLeft, FileText, List } from 'lucide-react';
-import api from '../lib/axios';
+import { Save, ArrowLeft, Type, Hash } from 'lucide-react';
+import api from '../../lib/axios';
+import ImageUpload from '../../components/ImageUpload';
 
 interface ContentType {
   id: number;
@@ -110,6 +111,15 @@ export default function ContentEntryEdit() {
         return <textarea value={value} onChange={(e) => handleInputChange(field.name, e.target.value)} rows={5} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary font-mono text-sm" />;
       case 'array':
         return <input type="text" value={Array.isArray(value) ? value.join(', ') : value} onChange={(e) => handleInputChange(field.name, e.target.value.split(',').map((s: string) => s.trim()))} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary" />;
+      case 'image':
+        return (
+          <ImageUpload
+            value={value}
+            onChange={(url) => handleInputChange(field.name, url)}
+            onDelete={() => handleInputChange(field.name, '')}
+            folder={`cmaas/${contentType?.name.toLowerCase()}`}
+          />
+        );
       default:
         return <input type="text" value={value} onChange={(e) => handleInputChange(field.name, e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary" />;
     }
@@ -133,7 +143,7 @@ export default function ContentEntryEdit() {
       <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-xl shadow-sm p-8 space-y-6">
         {contentType.schema.fields.map((field) => (
           <div key={field.name}>
-            <label className="block text-sm font-bold text-dark mb-2 capitalize flex items-center gap-2">
+            <label className="block text-sm font-bold text-dark mb-2 capitalize items-center gap-2">
               {field.name} <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold border bg-gray-50 text-gray-500 border-gray-100">{field.type}</span>
             </label>
             {renderField(field)}

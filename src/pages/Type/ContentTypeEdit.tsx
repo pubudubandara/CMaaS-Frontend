@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Plus, Trash2, Save, ArrowLeft, Type, Calendar, Hash, ToggleLeft, List, FileText, Lock } from 'lucide-react';
-import api from '../lib/axios';
+import { Plus, Trash2, Save, ArrowLeft, Type, Calendar, Hash, ToggleLeft, List, FileText, Lock, Image } from 'lucide-react';
+import api from '../../lib/axios';
 
 // Match backend types
 const FIELD_TYPES = [
@@ -11,6 +11,7 @@ const FIELD_TYPES = [
   { value: 'datetime', label: 'Date & Time', icon: Calendar },
   { value: 'boolean', label: 'Boolean', icon: ToggleLeft },
   { value: 'array', label: 'Array / Tags', icon: List },
+  { value: 'image', label: 'Image Upload', icon: Image },
 ];
 
 interface FieldDefinition {

@@ -9,6 +9,7 @@ import {
   FileText,
   Users,
   Loader2,
+  Book,
 } from "lucide-react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import api from "../../lib/axios";
@@ -51,8 +52,6 @@ const STATIC_SIDEBAR_ITEMS: SidebarGroup[] = [
         label: "Content Types",
         path: "/content-types",
         icon: Database,
-        hasButton: true,
-        buttonLabel: "+ Create",
       },
     ],
   },
@@ -70,6 +69,10 @@ const STATIC_SIDEBAR_ITEMS: SidebarGroup[] = [
   {
     group: "Settings",
     items: [{ label: "Settings", path: "/settings", icon: Settings }],
+  },
+  {
+    group: "Help",
+    items: [{ label: "Documentation", path: "/documentation", icon: Book }],
   },
 ];
 
@@ -176,7 +179,7 @@ export default function DashboardLayout() {
             <Box size={20} className="text-white" />
           </div>
           <span className="font-bold text-lg tracking-tight">
-            CMaaS{" "}
+            SchemaFlow{" "}
             <span className="text-gray-500 text-xs font-normal">
               | Admin Console
             </span>

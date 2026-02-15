@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, X, Save, ArrowLeft, Type, Calendar, Hash, ToggleLeft, List, FileText } from 'lucide-react';
-import api from '../lib/axios'; // Ensure this points to your real axios instance
+import { Plus, X, Save, ArrowLeft, Type, Calendar, Hash, ToggleLeft, List, FileText, Image } from 'lucide-react';
+import api from '../../lib/axios'; // Ensure this points to your real axios instance
 
 interface Field {
   name: string;
@@ -16,6 +16,7 @@ const FIELD_TYPES = [
   { value: 'datetime', label: 'Date & Time', icon: Calendar, description: 'Timestamps' },
   { value: 'boolean', label: 'Boolean', icon: ToggleLeft, description: 'True/False switches' },
   { value: 'array', label: 'Array / Tags', icon: List, description: 'List of values' },
+  { value: 'image', label: 'Image Upload', icon: Image, description: 'Upload images to Cloudinary' },
 ];
 
 export default function SchemaBuilder() {
