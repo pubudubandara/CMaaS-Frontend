@@ -43,14 +43,14 @@ interface SidebarGroup {
 const STATIC_SIDEBAR_ITEMS: SidebarGroup[] = [
   {
     group: "Overview",
-    items: [{ label: "Overview", path: "/dashboard", icon: LayoutDashboard }],
+    items: [{ label: "Overview", path: "/app/dashboard", icon: LayoutDashboard }],
   },
   {
     group: "Structure",
     items: [
       {
         label: "Content Types",
-        path: "/content-types",
+        path: "/app/content-types",
         icon: Database,
       },
     ],
@@ -68,11 +68,11 @@ const STATIC_SIDEBAR_ITEMS: SidebarGroup[] = [
   },
   {
     group: "Settings",
-    items: [{ label: "Settings", path: "/settings", icon: Settings }],
+    items: [{ label: "Settings", path: "/app/settings", icon: Settings }],
   },
   {
     group: "Help",
-    items: [{ label: "Documentation", path: "/documentation", icon: Book }],
+    items: [{ label: "Documentation", path: "/app/documentation", icon: Book }],
   },
 ];
 
@@ -114,7 +114,7 @@ export default function DashboardLayout() {
 
   // Trigger refresh on route changes (in case user added a type)
   useEffect(() => {
-    if (location.pathname === '/dashboard' || location.pathname.startsWith('/content-types')) {
+    if (location.pathname === '/app/dashboard' || location.pathname.startsWith('/app/content-types')) {
       setRefreshTrigger(prev => prev + 1);
     }
   }, [location.pathname]);
@@ -135,7 +135,7 @@ export default function DashboardLayout() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/");
   };
 
   const sortedContentTypes = [...contentTypes].sort((a, b) => {
@@ -158,7 +158,7 @@ export default function DashboardLayout() {
       } else {
         newItems = sortedContentTypes.map((ct) => ({
           label: ct.name,
-          path: `/content-manager/${ct.id}`, // Route to view entries
+          path: `/app/content-manager/${ct.id}`, // Route to view entries
           icon: getIcon(ct.name),
           dynamic: true,
           // hasButton is optional, so we don't need to define it here
@@ -176,7 +176,7 @@ export default function DashboardLayout() {
       <header className="h-14 bg-dark text-white flex items-center justify-between px-4 shadow-md z-50 fixed w-full top-0 left-0 border-b border-gray-800">
         <div className="flex items-center gap-2">
           <div className="bg-primary p-1 rounded">
-            <Box size={20} className="text-white" />
+            <img src="/logo.png" alt="Logo" className="w-5 h-5" />
           </div>
           <span className="font-bold text-lg tracking-tight">
             SchemaFlow{" "}
@@ -240,7 +240,7 @@ export default function DashboardLayout() {
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                navigate("/content-types"); // Or open modal
+                                navigate("/app/content-types"); // Or open modal
                               }}
                               className="opacity-0 group-hover/item:opacity-100 text-gray-500 hover:text-primary transition-all duration-200 p-1 mr-1"
                               title={item.buttonLabel || "+ Create"}

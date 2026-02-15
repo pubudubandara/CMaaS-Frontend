@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { login } from '../../lib/auth';
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
+
+  // Get the intended destination from state, or default to dashboard
+  const from = location.state?.from?.pathname || '/app/dashboard';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       await login(formData);
-      navigate('/dashboard');
+      navigate(from, { replace: true });
     } catch (error) {
       alert("Login failed");
     } finally {
@@ -24,8 +28,13 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="bg-surface p-8 rounded shadow-md border border-border w-full max-w-md">
         <div className="mb-6 text-center">
+          <div className="flex justify-center mb-4">
+            <div className="bg-primary p-3 rounded-lg">
+              <img src="/logo.png" alt="Logo" className="w-8 h-8" />
+            </div>
+          </div>
           <h1 className="text-2xl font-bold text-dark">Sign In</h1>
-          <p className="text-sm text-dark-muted">Welcome back to CMaaS</p>
+          <p className="text-sm text-dark-muted">Welcome back to SchemaFlow</p>
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-4">
