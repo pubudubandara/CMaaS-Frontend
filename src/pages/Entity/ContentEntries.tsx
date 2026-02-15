@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Plus, Search, Edit, Trash2, ArrowLeft, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
-import api from '../lib/axios';
+import api from '../../lib/axios';
 
 // --- Image Cell Component (Skeleton Loader) ---
 const ImageCell = ({ src }: { src: string }) => {

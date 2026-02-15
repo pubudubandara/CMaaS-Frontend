@@ -1,16 +1,16 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import DashboardLayout from './components/layout/DashboardLayout';
-import Register from './pages/Register';
-import Login from './pages/Login'; 
-import SchemaBuilder from './pages/SchemaBuilder';
-import ContentTypesList from './pages/ContentTypesList';
-import ContentTypeCreate from './pages/ContentTypeCreate';
-import ContentEntries from './pages/ContentEntries';
-import ContentEntryCreate from './pages/ContentEntryCreate';
+import Register from './pages/auth/Register';
+import Login from './pages/auth/Login'; 
+import SchemaBuilder from './pages/Type/SchemaBuilder';
+import ContentTypesList from './pages/Type/ContentTypesList';
+import ContentTypeCreate from './pages/Type/ContentTypeCreate';
+import ContentEntries from './pages/Entity/ContentEntries';
+import ContentEntryCreate from './pages/Entity/ContentEntryCreate';
 import DashboardHome from './pages/DashboardHome';   
 import Settings from './pages/Settings';
-import ContentEntryEdit from './pages/ContentEntryEdit';
-import ContentTypeEdit from './pages/ContentTypeEdit';
+import ContentEntryEdit from './pages/Entity/ContentEntryEdit';
+import ContentTypeEdit from './pages/Type/ContentTypeEdit';
 import Documentation from './pages/Documentation';
 
 function App() {

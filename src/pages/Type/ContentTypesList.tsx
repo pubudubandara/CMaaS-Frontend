@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Edit, Trash2, FileText, Box, Users } from 'lucide-react';
-import api from '../lib/axios';
+import api from '../../lib/axios';
 
 interface ContentType {
   id: number;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Trash2, Save, ArrowLeft, Type, Calendar, Hash, ToggleLeft, List, FileText, Image } from 'lucide-react';
-import api from '../lib/axios';
+import api from '../../lib/axios';
 
 // 1. MATCH BACKEND TYPES
 const FIELD_TYPES = [

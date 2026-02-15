@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { registerCompany } from '../lib/auth';
+import { registerCompany } from '../../lib/auth';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ export default function Register() {
       <div className="bg-surface p-8 rounded shadow-md border border-border w-full max-w-md">
         <div className="mb-6 text-center">
           <h1 className="text-2xl font-bold text-dark">Create Account</h1>
-          <p className="text-sm text-dark-muted">Start building with CMaaS today</p>
+          <p className="text-sm text-dark-muted">Start building with SchemaFlow today</p>
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-4">

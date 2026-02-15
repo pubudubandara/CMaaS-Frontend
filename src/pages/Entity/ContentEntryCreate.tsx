@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Save, ArrowLeft, Type, Hash } from 'lucide-react';
-import api from '../lib/axios';
-import ImageUpload from '../components/ImageUpload';
+import api from '../../lib/axios';
+import ImageUpload from '../../components/ImageUpload';
 
 interface ContentType {
   id: number;

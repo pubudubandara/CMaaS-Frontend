@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, X, Save, ArrowLeft, Type, Calendar, Hash, ToggleLeft, List, FileText, Image } from 'lucide-react';
-import api from '../lib/axios'; // Ensure this points to your real axios instance
+import api from '../../lib/axios'; // Ensure this points to your real axios instance
 
 interface Field {
   name: string;
