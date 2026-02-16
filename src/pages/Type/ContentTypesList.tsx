@@ -6,7 +6,6 @@ import api from '../../lib/axios';
 interface ContentType {
   id: number;
   name: string;
-  // Made optional to prevent crashes
   schema?: {
     fields?: Array<{
       name: string;
