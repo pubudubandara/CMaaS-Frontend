@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { registerCompany } from '../../lib/auth';
 import EmailVerificationPending from '../../components/auth/EmailVerificationPending';
 
@@ -15,7 +16,7 @@ export default function Register() {
     
     // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
     
@@ -25,8 +26,9 @@ export default function Register() {
       // After successful registration, show email verification pending
       setRegisteredEmail(formData.email);
       setRegistrationComplete(true);
-    } catch (error) {
-      alert("Registration failed");
+    } catch (error: any) {
+      const errorMessage = error.response?.data || error.message || "Registration failed";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

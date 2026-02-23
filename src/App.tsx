@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import DashboardLayout from './components/layout/DashboardLayout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import PublicRoute from './components/auth/PublicRoute';
@@ -22,6 +23,7 @@ import LandingPage from './pages/LandingPage';
 function App() {
   return (
     <Router>
+      <Toaster position="top-right" />
       <Routes>
         {/* Landing Page - accessible by everyone */}
         <Route path="/" element={<LandingPage />} />

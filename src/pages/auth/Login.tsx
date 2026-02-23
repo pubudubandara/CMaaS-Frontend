@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { login } from '../../lib/auth';
 import { CheckCircle } from 'lucide-react';
 
@@ -30,8 +31,9 @@ export default function Login() {
     try {
       await login(formData);
       navigate(from, { replace: true });
-    } catch (error) {
-      alert("Login failed");
+    } catch (error: any) {
+      const errorMessage = error.response?.data || error.message || "Login failed";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
