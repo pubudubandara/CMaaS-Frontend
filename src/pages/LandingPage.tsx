@@ -1,13 +1,9 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
-  Code,
   Terminal,
   Key,
   Server,
-  Copy,
-  Check,
   CheckCircle,
   Zap,
   ShieldCheck,
@@ -17,39 +13,8 @@ import {
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const [copied, setCopied] = useState(false);
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL ? `${import.meta.env.VITE_BACKEND_URL}/api` : "https://your-api-domain.com/api";
-
-  const exampleCode = `// Example: Fetching all Blog Posts
-const response = await fetch('${BASE_URL}/Delivery/BlogPosts', {
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json',
-    'X-Api-Key': 'YOUR_API_KEY_HERE'
-  }
-});
-
-const data = await response.json();
-console.log(data);
-
-// Example: Fetching a specific Blog Post by ID
-const response2 = await fetch('${BASE_URL}/Delivery/BlogPosts/123', {
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json',
-    'X-Api-Key': 'YOUR_API_KEY_HERE'
-  }
-});
-
-const post = await response2.json();
-console.log(post);`;
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(exampleCode);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   return (
     <div className="min-h-screen bg-background font-sans text-dark selection:bg-primary/20">

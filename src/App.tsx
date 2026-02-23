@@ -4,6 +4,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import PublicRoute from './components/auth/PublicRoute';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
+import VerifyEmail from './pages/auth/VerifyEmail';
 import SchemaBuilder from './pages/Type/SchemaBuilder';
 import ContentTypesList from './pages/Type/ContentTypesList';
 import ContentTypeCreate from './pages/Type/ContentTypeCreate';
@@ -33,6 +34,9 @@ function App() {
           <PublicRoute>
             <Login />
           </PublicRoute>
+        } />
+        <Route path="/verify-email" element={
+          <VerifyEmail />
         } />
 
         {/* Protected Dashboard Routes */}
