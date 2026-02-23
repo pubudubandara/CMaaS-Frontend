@@ -103,3 +103,22 @@ export const getUser = (): User | null => {
 export const isAuthenticated = (): boolean => {
   return !!getUser();
 };
+
+// --- 5. Password Reset Functions ---
+
+export const forgotPassword = async (email: string): Promise<void> => {
+  await api.post('/Auth/forgot-password', { email });
+};
+
+export const validateResetToken = async (email: string, token: string): Promise<void> => {
+  await api.post('/Auth/validate-reset-token', { email, token });
+};
+
+export const resetPassword = async (
+  email: string,
+  token: string,
+  newPassword: string,
+  confirmPassword: string
+): Promise<void> => {
+  await api.post('/Auth/reset-password', { email, token, newPassword, confirmPassword });
+};
