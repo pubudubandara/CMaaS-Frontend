@@ -41,7 +41,7 @@ export default function VerifyEmail() {
       setError(null);
 
       try {
-        const response = await axios.post('/Auth/verify-email', {
+        await axios.post('/Auth/verify-email', {
           email,
           token
         });
@@ -87,7 +87,7 @@ export default function VerifyEmail() {
     setError(null);
 
     try {
-      const response = await axios.post('/Auth/resend-verification-email', {
+      await axios.post('/Auth/resend-verification-email', {
         email
       });
 
