@@ -10,6 +10,8 @@ import {
   Users,
   Loader2,
   Book,
+  Menu,
+  X,
 } from "lucide-react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import api from "../../lib/axios";
@@ -82,7 +84,8 @@ export default function DashboardLayout() {
   const [contentTypes, setContentTypes] = useState<ContentType[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
-  
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   // Refresh trigger to reload sidebar when types change
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
@@ -117,6 +120,8 @@ export default function DashboardLayout() {
     if (location.pathname === '/app/dashboard' || location.pathname.startsWith('/app/content-types')) {
       setRefreshTrigger(prev => prev + 1);
     }
+    // Close sidebar on navigation (mobile)
+    setSidebarOpen(false);
   }, [location.pathname]);
 
   // Trigger refresh on window focus
@@ -175,6 +180,13 @@ export default function DashboardLayout() {
       {/* Top Header */}
       <header className="h-14 bg-dark text-white flex items-center justify-between px-4 shadow-md z-50 fixed w-full top-0 left-0 border-b border-gray-800">
         <div className="flex items-center gap-2">
+          <button
+            className="lg:hidden text-gray-300 hover:text-white p-1 mr-1"
+            onClick={() => setSidebarOpen(prev => !prev)}
+            aria-label="Toggle sidebar"
+          >
+            {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
           <div className="bg-primary p-1 rounded">
             <img src="/logo.png" alt="Logo" className="w-5 h-5" />
           </div>
@@ -197,8 +209,23 @@ export default function DashboardLayout() {
 
       {/* Main Layout Wrapper */}
       <div className="flex pt-14 h-screen overflow-hidden">
+        {/* Mobile overlay */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 z-30 bg-black/60 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
         {/* Sidebar */}
-        <aside className="w-64 bg-dark border-r border-gray-800 flex flex-col h-full overflow-y-auto">
+        <aside
+          className={`
+            fixed lg:static top-14 left-0 z-40 h-[calc(100vh-3.5rem)] lg:h-full
+            w-64 bg-dark border-r border-gray-800 flex flex-col overflow-y-auto
+            transition-transform duration-300 ease-in-out
+            ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+          `}
+        >
           <nav className="p-4 space-y-6">
             {processedSidebarItems.map((group, groupIndex) => (
               <div key={group.group || groupIndex}>
