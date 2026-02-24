@@ -90,8 +90,10 @@ npm run preview
 src/
 ├── components/
 │   ├── auth/
-│   │   ├── ProtectedRoute.tsx    # Authentication guard for protected routes
-│   │   └── PublicRoute.tsx       # Redirect authenticated users from auth pages
+│   │   ├── EmailVerificationPending.tsx # Email verification pending notice
+│   │   ├── ProtectedRoute.tsx           # Authentication guard for protected routes
+│   │   ├── PublicRoute.tsx              # Redirect authenticated users from auth pages
+│   │   └── ResendVerificationEmail.tsx  # Resend verification email component
 │   └── layout/
 │       └── DashboardLayout.tsx   # Main dashboard layout with sidebar
 ├── lib/
@@ -99,8 +101,11 @@ src/
 │   └── axios.ts                  # Axios instance with interceptors
 ├── pages/
 │   ├── auth/
+│   │   ├── ForgotPassword.tsx    # Forgot password page
 │   │   ├── Login.tsx             # Login page
-│   │   └── Register.tsx          # Registration page
+│   │   ├── Register.tsx          # Registration page
+│   │   ├── ResetPassword.tsx     # Reset password page
+│   │   └── VerifyEmail.tsx       # Email verification page
 │   ├── Entity/
 │   │   ├── ContentEntries.tsx    # List all entries for a content type
 │   │   ├── ContentEntryCreate.tsx # Create new entry
@@ -124,6 +129,9 @@ src/
 - `/` - Landing page (accessible by everyone)
 - `/login` - User login
 - `/register` - Company/user registration
+- `/forgot-password` - Request password reset email
+- `/reset-password` - Reset password via emailed token
+- `/verify-email` - Verify email address via token
 
 ### Protected Routes (require authentication)
 All protected routes are prefixed with `/app`:
@@ -144,10 +152,14 @@ All protected routes are prefixed with `/app`:
 The application uses JWT-based authentication:
 
 1. **Registration**: Users create an organization account with admin credentials
-2. **Login**: Users authenticate with email and password
-3. **Token Storage**: JWT tokens are stored in localStorage
-4. **Protected Routes**: `ProtectedRoute` component guards protected pages
-5. **Public Routes**: `PublicRoute` component redirects authenticated users to dashboard
+2. **Email Verification**: A verification email is sent after registration; `VerifyEmail` page handles token confirmation and `EmailVerificationPending` component prompts the user while waiting
+3. **Resend Verification**: `ResendVerificationEmail` component allows users to request a new verification email
+4. **Login**: Users authenticate with email and password
+5. **Forgot Password**: Users can request a password reset email via `/forgot-password`
+6. **Reset Password**: Users set a new password using the token from the reset email via `/reset-password`
+7. **Token Storage**: JWT tokens are stored in localStorage
+8. **Protected Routes**: `ProtectedRoute` component guards protected pages
+9. **Public Routes**: `PublicRoute` component redirects authenticated users to dashboard
 
 ## 🌐 API Integration
 
@@ -159,6 +171,10 @@ The API base URL is configured via the `VITE_BACKEND_URL` environment variable.
 #### Authentication
 - `POST /api/Auth/register-company` - Register new organization
 - `POST /api/Auth/login` - User login
+- `POST /api/Auth/forgot-password` - Request password reset email
+- `POST /api/Auth/reset-password` - Reset password using token
+- `GET /api/Auth/verify-email` - Verify email address using token
+- `POST /api/Auth/resend-verification-email` - Resend verification email
 
 #### Content Types
 - `GET /api/ContentTypes` - List all content types

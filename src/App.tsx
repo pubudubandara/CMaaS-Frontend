@@ -1,9 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import DashboardLayout from './components/layout/DashboardLayout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import PublicRoute from './components/auth/PublicRoute';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
+import VerifyEmail from './pages/auth/VerifyEmail';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 import SchemaBuilder from './pages/Type/SchemaBuilder';
 import ContentTypesList from './pages/Type/ContentTypesList';
 import ContentTypeCreate from './pages/Type/ContentTypeCreate';
@@ -19,6 +23,7 @@ import LandingPage from './pages/LandingPage';
 function App() {
   return (
     <Router>
+      <Toaster position="top-right" />
       <Routes>
         {/* Landing Page - accessible by everyone */}
         <Route path="/" element={<LandingPage />} />
@@ -34,6 +39,15 @@ function App() {
             <Login />
           </PublicRoute>
         } />
+        <Route path="/verify-email" element={
+          <VerifyEmail />
+        } />
+        <Route path="/forgot-password" element={
+          <PublicRoute>
+            <ForgotPassword />
+          </PublicRoute>
+        } />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Protected Dashboard Routes */}
         <Route path="/app" element={
